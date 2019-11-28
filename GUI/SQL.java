@@ -44,50 +44,69 @@ public class SQL {
 	}
 	
 	public void doLogin() {
-		String SQL = "select pw, 성명 from 사용자 where id=?";
+		String SQL = "select 사용자.pw, 사용자.성명, 학생.성별, 학생.학적상태, 학생.학생주소, 학생.보호자주소, 학생.주민등록번호, 학생.휴대전화번호 from 사용자, 학생 where 학생.학생id=? and 사용자.id=?";
 		
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, info.getId());
+			pstmt.setString(2, info.getId());
 			
 			ResultSet rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
 				if(rs.getString(1).equals(info.getPw())) {
 					info.setName(rs.getString(2));
+					
+					info.setSex(rs.getString(3));
+					info.setStatus(rs.getString(4));
+					info.setStudentAddress(rs.getString(5));
+					info.setParentAddress(rs.getString(6));
+					info.setIdentificationNumber(rs.getString(7));
+					info.setPhoneNumber(rs.getString(8));
 				} else {
 					System.out.println("비밀번호가 틀렸습니다.");
 				}
 			} else {
 				System.out.println("로그인 정보가 잘못되었습니다.");
 			}
+			pstmt.close();
+			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	public void doLogin(String id, String pw) {
-		String checkID = "select pw, 성명 from 사용자 where id=?";
-		
+		String SQL = "select 사용자.pw, 사용자.성명, 학생.성별, 학생.학적상태, 학생.학생주소, 학생.보호자주소, 학생.주민등록번호, 학생.휴대전화번호 from 사용자, 학생 where 학생.학생id=? and 사용자.id=?";
 		
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(checkID);
-			pstmt.setString(1, id);
+			info.setId(id);
+			info.setPw(pw);
+			
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, info.getId());
+			pstmt.setString(2, info.getId());
 			
 			ResultSet rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				if(rs.getString(1).equals(pw)) {
-					info.setPw(rs.getString(1));
+				if(rs.getString(1).equals(info.getPw())) {
 					info.setName(rs.getString(2));
+					
+					info.setSex(rs.getString(3));
+					info.setStatus(rs.getString(4));
+					info.setStudentAddress(rs.getString(5));
+					info.setParentAddress(rs.getString(6));
+					info.setIdentificationNumber(rs.getString(7));
+					info.setPhoneNumber(rs.getString(8));
 				} else {
 					System.out.println("비밀번호가 틀렸습니다.");
 				}
 			} else {
 				System.out.println("로그인 정보가 잘못되었습니다.");
 			}
-			
-			
+			pstmt.close();
+			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -109,19 +128,12 @@ public class SQL {
 			
 			System.out.println(r>0?"success":"fail");
 			
+			pstmt.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		
-	}
-	
-	public static void main(String args[]) {
-		SQL sql = new SQL();
-		
-		//sql.setInfo("20160011", "*******");
-		sql.doLogin("2016001", "******");
-		
-		System.out.println(sql.info.getPw()); // ����ó�� �ʿ�
 	}
 }

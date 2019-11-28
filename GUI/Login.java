@@ -92,7 +92,7 @@ public class Login extends JFrame {
 					if(sql.getInfo().getName() == null)
 						JOptionPane.showMessageDialog(null, "로그인 정보가 잘못되었습니다.");
 					else {
-						new MENU_STUDENT();
+						new MENU_STUDENT(sql);
 						setVisible(false);
 					}
 				}
