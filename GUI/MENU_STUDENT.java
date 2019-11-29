@@ -25,9 +25,12 @@ public class MENU_STUDENT extends JFrame {
 	private JButton button_1;
 	private JButton button_2;
 	private JButton button_3;
-	public MENU_STUDENT() {
+	private JTextField textField_12;
+	private JTextField textField_13;
+	public MENU_STUDENT(SQL sql) {
 		setTitle("학생메뉴");
 		getContentPane().setLayout(null);
+		
 		textField = new JTextField();
 		textField.setEditable(false);
 		textField.setBackground(new Color(112, 128, 144));
@@ -51,7 +54,7 @@ public class MENU_STUDENT extends JFrame {
 		textField_2 = new JTextField();
 		textField_2.setEditable(false);
 		textField_2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_2.setText("20150154");
+		textField_2.setText(sql.getInfo().getId().toString().trim());
 		textField_2.setBounds(90, 64, 120, 30);
 		getContentPane().add(textField_2);
 		textField_2.setColumns(10);
@@ -59,7 +62,7 @@ public class MENU_STUDENT extends JFrame {
 		textField_3 = new JTextField();
 		textField_3.setEditable(false);
 		textField_3.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_3.setText("김민수");
+		textField_3.setText(sql.getInfo().getName().toString().trim());
 		textField_3.setColumns(10);
 		textField_3.setBounds(284, 64, 120, 30);
 		getContentPane().add(textField_3);
@@ -74,24 +77,6 @@ public class MENU_STUDENT extends JFrame {
 		textField_4.setBounds(206, 64, 80, 30);
 		getContentPane().add(textField_4);
 		
-		textField_5 = new JTextField();
-		textField_5.setEditable(false);
-		textField_5.setBackground(new Color(192, 192, 192));
-		textField_5.setText("학년");
-		textField_5.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_5.setFont(new Font("HY寃ш퀬�뵓", Font.PLAIN, 12));
-		textField_5.setColumns(10);
-		textField_5.setBounds(12, 116, 80, 30);
-		getContentPane().add(textField_5);
-		
-		textField_6 = new JTextField();
-		textField_6.setEditable(false);
-		textField_6.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_6.setText("2");
-		textField_6.setColumns(10);
-		textField_6.setBounds(90, 116, 120, 30);
-		getContentPane().add(textField_6);
-		
 		textField_7 = new JTextField();
 		textField_7.setEditable(false);
 		textField_7.setBackground(new Color(192, 192, 192));
@@ -105,7 +90,8 @@ public class MENU_STUDENT extends JFrame {
 		textField_8 = new JTextField();
 		textField_8.setEditable(false);
 		textField_8.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_8.setText("재학중");
+		textField_8.setText(sql.getInfo().getStatus());
+		System.out.println(sql.getInfo().getStatus().toString().trim());
 		textField_8.setColumns(10);
 		textField_8.setBounds(284, 116, 120, 30);
 		getContentPane().add(textField_8);
@@ -113,19 +99,19 @@ public class MENU_STUDENT extends JFrame {
 		textField_9 = new JTextField();
 		textField_9.setEditable(false);
 		textField_9.setBackground(new Color(192, 192, 192));
-		textField_9.setText("휴대전화번호");
+		textField_9.setText("성별");
 		textField_9.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_9.setFont(new Font("HY寃ш퀬�뵓", Font.PLAIN, 12));
 		textField_9.setColumns(10);
-		textField_9.setBounds(12, 166, 80, 30);
+		textField_9.setBounds(12, 116, 80, 30);
 		getContentPane().add(textField_9);
 		
 		textField_10 = new JTextField();
 		textField_10.setEditable(false);
 		textField_10.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_10.setText("01097337207");
+		textField_10.setText(sql.getInfo().getSex().toString().trim());
 		textField_10.setColumns(10);
-		textField_10.setBounds(90, 166, 120, 30);
+		textField_10.setBounds(90, 115, 120, 30);
 		getContentPane().add(textField_10);
 		
 		textField_11 = new JTextField();
@@ -182,14 +168,27 @@ public class MENU_STUDENT extends JFrame {
 		});
 		button_3.setBounds(144, 352, 100, 30);
 		getContentPane().add(button_3);
+		
+		textField_12 = new JTextField();
+		textField_12.setText("휴대전화번호");
+		textField_12.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_12.setFont(new Font("Dialog", Font.PLAIN, 12));
+		textField_12.setEditable(false);
+		textField_12.setColumns(10);
+		textField_12.setBackground(Color.LIGHT_GRAY);
+		textField_12.setBounds(12, 172, 80, 30);
+		getContentPane().add(textField_12);
+		
+		textField_13 = new JTextField();
+		textField_13.setText(sql.getInfo().getPhoneNumber().toString().trim());
+		textField_13.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_13.setEditable(false);
+		textField_13.setColumns(10);
+		textField_13.setBounds(90, 171, 120, 30);
+		getContentPane().add(textField_13);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500,500);
 		
-	}
-
-	public static void main(String[] args) {
-		new MENU_STUDENT();
-
 	}
 }

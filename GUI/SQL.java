@@ -44,7 +44,7 @@ public class SQL {
 	}
 	
 	public void doLogin() {
-		String SQL = "select 사용자.pw, 사용자.성명, 학생.성별, 학생.학적상태, 학생.학생주소, 학생.보호자주소, 학생.주민등록번호, 학생.휴대전화번호 from 사용자, 학생 where 학생.학생id=? and 사용자.id=?";
+		String SQL = "select 사용자.pw, 사용자.성명, 학생.성별, 코드.코드명, 학생.학생주소, 학생.보호자주소, 학생.주민등록번호, 학생.휴대전화번호 from 사용자, 학생, 코드 where 학생.학생id=? and 사용자.id=? and 코드.코드구분id=004 and 코드.코드=학생.학적상태";
 		
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -77,7 +77,7 @@ public class SQL {
 		}
 	}
 	public void doLogin(String id, String pw) {
-		String SQL = "select 사용자.pw, 사용자.성명, 학생.성별, 학생.학적상태, 학생.학생주소, 학생.보호자주소, 학생.주민등록번호, 학생.휴대전화번호 from 사용자, 학생 where 학생.학생id=? and 사용자.id=?";
+		String SQL = "select 사용자.pw, 사용자.성명, 학생.성별, 코드.코드명, 학생.학생주소, 학생.보호자주소, 학생.주민등록번호, 학생.휴대전화번호 from 사용자, 학생, 코드 where 학생.학생id=? and 사용자.id=? and 코드.코드구분id=004 and 코드.코드=학생.학적상태";
 		
 		try {
 			info.setId(id);

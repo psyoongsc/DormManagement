@@ -46,19 +46,19 @@ public class Login extends JFrame {
 		owner = this; // ������
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 546, 365);
+		setBounds(100, 100, 424, 271);
 		getContentPane().setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("\uC544\uC774\uB514");
-		lblNewLabel.setBounds(60, 92, 60, 40);
+		lblNewLabel.setBounds(35, 37, 60, 40);
 		getContentPane().add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("\uBE44\uBC00\uBC88\uD638");
-		lblNewLabel_1.setBounds(60, 142, 60, 40);
+		lblNewLabel_1.setBounds(35, 98, 60, 40);
 		getContentPane().add(lblNewLabel_1);
 
 		textLogin = new JTextField();
-		textLogin.setBounds(146, 93, 259, 39);
+		textLogin.setBounds(109, 38, 259, 39);
 		textLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -67,7 +67,7 @@ public class Login extends JFrame {
 		getContentPane().add(textLogin);
 		textLogin.setColumns(10);
 		textPassword = new JPasswordField();
-		textPassword.setBounds(146, 143, 260, 40);
+		textPassword.setBounds(109, 98, 260, 40);
 		textPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnOk.doClick(); // ����
@@ -76,7 +76,7 @@ public class Login extends JFrame {
 		getContentPane().add(textPassword);
 
 		btnOk = new JButton("\uB85C\uADF8\uC778");
-		btnOk.setBounds(416, 92, 80, 90);
+		btnOk.setBounds(35, 150, 333, 40);
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
