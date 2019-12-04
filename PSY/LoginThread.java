@@ -17,13 +17,11 @@ public class LoginThread extends Thread {
 	}
 
 	public void run() {
-		while (true) {
-			try {
-				client.handle();
-			} catch (IOException ioe) {
-				System.out.println("Listening error: " + ioe.getMessage());
-				client.stop();
-			}
+		try {
+			client.handle();
+		} catch (IOException ioe) {
+			System.out.println("Listening error: " + ioe.getMessage());
+			client.stop();
 		}
 	}
 }

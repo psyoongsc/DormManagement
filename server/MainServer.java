@@ -105,6 +105,10 @@ public class MainServer implements Runnable {
 		int chance = 5;
 
 		while (true) {
+			if(chance-- <= 0) {
+				
+			}
+			
 			int packetType = buf[0]; // 수신 데이터에서 패킷 타입 얻음
 			protocol.setPacket(packetType, buf); // 패킷 타입을 Protocol 객체의 packet 멤버변수에 buf를 복사
 
@@ -123,7 +127,7 @@ public class MainServer implements Runnable {
 			
 				System.out.println(id + " " + password);
 
-				SQL sql = new SQL();
+
 				sql.setInfo(id.toString().trim(), password.toString().trim());
 				if (id.charAt(0) == 'a') {
 					sql.doLogin(1); // 얘는 관리자고 (관리자 id는 admin1, admin2 이런 식으로 되어있다.)

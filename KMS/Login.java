@@ -140,7 +140,7 @@ public class Login extends JFrame implements Runnable {
 	}
 
 	public void run() {
-		while (thread != null) {
+		if (thread != null) {
 			try {
 				os.write(protocol.getPacket());
 				os.flush();
@@ -192,6 +192,7 @@ public class Login extends JFrame implements Runnable {
 		Login login = new Login();
 
 		while (true) {
+			System.out.println("handling");
 			is.read(buf);
 			int packetType = buf[0];
 			protocol.setPacket(packetType, buf);
