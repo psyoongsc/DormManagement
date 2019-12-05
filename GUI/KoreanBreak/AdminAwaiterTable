@@ -1,0 +1,80 @@
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+
+public class AdminAwaiterTable{
+	private static JTextField textField;
+	
+     public static void main(String[] ar){
+  String title[]= {"학번","생활관","식사구분","학점"};
+  JFrame frame = new JFrame("test");  
+  DefaultTableModel model = new DefaultTableModel(title, 0); 
+  JTable table = new JTable(model);
+  table.setBounds(12, 379, 860, 264);
+  String arr[]={"학번", "생활관","식사구분","학점"};
+  model.addRow(arr); //테이블에 행 추가
+  String str1, str2=null;
+  int i1,i2 ;
+  int a,i;
+  try {
+	  Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+	  con = DriverManager.getConnection("jdbc:mysql://localhost/test1?serverTimezone=Asia/Seoul", "root", "lucifer1*");
+		st = con.createStatement();
+		str1 = "select * from 대기";
+		rs = st.executeQuery(str1);
+		ResultSetMetaData rsmt = rs.getMetaData();
+   while(rs.next()){
+	
+    str1=rs.getString(2);
+    str2=rs.getString(3);
+    i1=rs.getInt(1);
+    i2=rs.getInt(4);
+    //getString(컬럼 번호)
+          //여기서 컬럼번호는 1부터 시작
+    arr[0]=i1+"";
+    arr[1]=str1;
+    arr[2]=str2;
+    arr[3]=i2+"";
+    model.addRow(arr);
+    
+   }
+   //리소스 반환
+  con.close();
+   rs.close();
+} catch (Exception e1) {
+   e1.printStackTrace();
+  }
+  frame.getContentPane().setLayout(null);
+  
+  JScrollPane scrollPane = new JScrollPane();
+  scrollPane.setBounds(12, 186, 860, 251);
+  scrollPane.setViewportView(table);
+  frame.getContentPane().add(scrollPane);
+  
+  textField = new JTextField();
+  textField.setText("대기자명단");
+  textField.setHorizontalAlignment(SwingConstants.CENTER);
+  textField.setFont(new Font("HY견고딕", Font.PLAIN, 16));
+  textField.setEditable(false);
+  textField.setColumns(10);
+  textField.setBackground(new Color(112, 128, 144));
+  textField.setBounds(12, 10, 130, 30);
+  frame.getContentPane().add(textField);
+  //생성된 프레임창에 데이터가 삽입된 테이블을 출력
+ 
+  frame.setBounds(0,0,900,486); //(x좌표,y좌표, 창너비, 창높이)
+  frame.setVisible(true);
+  
+ }
+}
+
+
+
