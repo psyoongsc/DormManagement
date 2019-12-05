@@ -42,8 +42,7 @@ public class MainServerThread extends Thread {
 		System.out.println("Server Thread " + ID + " running.");
 		byte[] buf = new byte[1000];
 		try {
-			is.read(buf);
-			server.handle(os, ID, buf);
+			server.handle(is, os, ID, buf);
 		} catch (IOException ioe) {
 			System.out.println(ID + " ERROR reading: " + ioe.getMessage());
 			server.remove(ID);

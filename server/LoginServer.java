@@ -24,7 +24,7 @@ public class LoginServer{
 	        Protocol protocol = new Protocol(Protocol.PT_REQ_LOGIN);
 	        os.write(protocol.getPacket());
 	
-	        boolean program_stop = false;
+	        boolean Login_stop = false;
 	        int chance = 5;
 	
 	        while(true){
@@ -38,8 +38,8 @@ public class LoginServer{
 	                case Protocol.PT_EXIT:			// 프로그램 종료 수신
 	                    protocol = new Protocol(Protocol.PT_EXIT);
 	                    os.write(protocol.getPacket());
-	                    program_stop = true;
-	                    System.out.println("서버종료");
+	                    Login_stop = true;
+	                    System.out.println("로그인 종료");
 	                    break;
 	
 	                case Protocol.PT_RES_LOGIN:		// 로그인 정보 수신
@@ -84,7 +84,7 @@ public class LoginServer{
 	                    os.write(protocol.getPacket());
 	                    break;
 	            }//end switch
-	            if(program_stop) break;
+	            if(Login_stop) break;
 	
 	        }//end while
 	        

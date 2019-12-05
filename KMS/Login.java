@@ -22,7 +22,7 @@ import YJ.Protocol;
 
 // JOptionPane.showMessageDialog(owner, "�α��� ����"); //this : �θ� ������ �߾ӿ� ǥ��,  this�� �ȵǹǷ� ������ owner = this,  null : ȭ�� �߾�
 
-public class Login extends JFrame implements Runnable {
+public class Login extends JFrame {
 	private JTextField textLogin;
 	private JPasswordField textPassword;
 	private JButton btnOk;
@@ -33,7 +33,6 @@ public class Login extends JFrame implements Runnable {
 	static InputStream is;
 
 	private Socket socket = null;
-	private Thread thread = null;
 	private LoginThread client = null;
 	private LoginInfo stuInfo = null;
 
@@ -64,7 +63,6 @@ public class Login extends JFrame implements Runnable {
 	 * Create the frame.
 	 */
 	public Login() {
-
 
 	} // UI 부분
 
@@ -120,34 +118,33 @@ public class Login extends JFrame implements Runnable {
 					protocol.setId(id);
 					protocol.setPassword(pwd);
 					System.out.println("로그인 정보 전송");
-					thread.start();
+					try {
+						os.write(protocol.getPacket());
+						os.flush();
+					} catch (IOException ioe) {
+						System.out.println("Sending error: " + ioe.getMessage());
+						stop();
+					}
 					// System.out.println(protocol.getId());
 				}
 			}
 		});
 		getContentPane().add(btnOk);
 		
+		owner.disable();
+
 		System.out.println("Establishing connection. Please wait ...");
 		try {
 			socket = new Socket(serverName, serverPort);
 			System.out.println("Connected: " + socket);
+			owner.enable();
 			start();
 		} catch (UnknownHostException uhe) {
 			System.out.println("Host unknown: " + uhe.getMessage());
+			System.exit(0);
 		} catch (IOException ioe) {
 			System.out.println("Unexpected exception: " + ioe.getMessage());
-		}
-	}
-
-	public void run() {
-		if (thread != null) {
-			try {
-				os.write(protocol.getPacket());
-				os.flush();
-			} catch (IOException ioe) {
-				System.out.println("Sending error: " + ioe.getMessage());
-				stop();
-			}
+			System.exit(0);
 		}
 	}
 
@@ -155,22 +152,11 @@ public class Login extends JFrame implements Runnable {
 		is = socket.getInputStream();
 		os = socket.getOutputStream();
 		System.out.println("in start");
-		if (thread == null) {
-			System.out.println(socket.getPort());
-			client = new LoginThread(this, socket);
-			if(thread == null) 
-				System.out.println("null");
-			thread = new Thread(this);
-			if(thread == null)
-				System.out.println("null");
-		}
+		System.out.println(socket.getPort());
+		client = new LoginThread(this, socket);
 	}
 
 	public void stop() {
-		if (thread != null) {
-			thread.stop();
-			thread = null;
-		}
 		try {
 			if (is != null)
 				is.close();
@@ -189,16 +175,16 @@ public class Login extends JFrame implements Runnable {
 		protocol = new Protocol();
 		byte[] buf = protocol.getPacket();
 		int chance = 5;
-		Login login = new Login();
 
 		while (true) {
-			System.out.println("handling");
+			
 			is.read(buf);
 			int packetType = buf[0];
 			protocol.setPacket(packetType, buf);
 			if (packetType == Protocol.PT_EXIT) {
 				System.out.println("클라이언트 종료");
-				login.setVisible(false);
+				System.out.println("프로그램을 종료합니다.");
+				System.exit(0);
 				break;
 			}
 
@@ -207,7 +193,7 @@ public class Login extends JFrame implements Runnable {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							login.setVisible(true);
+							owner.setVisible(true);
 //                    login.startClient();
 
 						} catch (Exception e) {
@@ -216,14 +202,11 @@ public class Login extends JFrame implements Runnable {
 					}
 				});
 
-				if (chance < 5) {
-					JOptionPane.showMessageDialog(null, "로그인 정보가 잘못되었습니다. " + "남은 기회 " + chance + "번");
-					System.out.println("로그인 실패\n");
-				}
+				JOptionPane.showMessageDialog(null, "로그인 정보가 잘못되었습니다. " + "남은 기회 " + --chance + "번");
+				System.out.println("로그인 실패\n");
 
 				System.out.println("서버가 로그인 정보 요청");
-				System.out.println("남은 기회 : " + chance--);
-//					System.out.print("아이디 : ");
+				System.out.println("남은 기회 : " + chance);
 				break;
 
 			case Protocol.PT_LOGIN_RESULT:
@@ -237,7 +220,7 @@ public class Login extends JFrame implements Runnable {
 					} else {
 						new MENU_STUDENT(queryResult);
 					}
-					login.setVisible(false);
+					owner.setVisible(false);
 
 				} else {
 					System.out.println("비밀번호 오류횟수 5회이상 아이디입니다.");

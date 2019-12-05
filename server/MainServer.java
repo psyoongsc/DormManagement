@@ -99,16 +99,14 @@ public class MainServer implements Runnable {
 			System.out.println("Client refused: maximum " + clients.length + " reached.");
 	}
 
-	public synchronized void handle(OutputStream os, int ID, byte[] buf) throws IOException{
+	public synchronized void handle(InputStream is, OutputStream os, int ID, byte[] buf) throws IOException{
 
-		boolean program_stop = false;
+		boolean login_stop = false;
+		boolean login_success = false;
 		int chance = 5;
 
 		while (true) {
-			if(chance-- <= 0) {
-				
-			}
-			
+			is.read(buf);
 			int packetType = buf[0]; // 수신 데이터에서 패킷 타입 얻음
 			protocol.setPacket(packetType, buf); // 패킷 타입을 Protocol 객체의 packet 멤버변수에 buf를 복사
 
@@ -116,17 +114,14 @@ public class MainServer implements Runnable {
 			case Protocol.PT_EXIT: // 프로그램 종료 수신
 				protocol = new Protocol(Protocol.PT_EXIT);
 				os.write(protocol.getPacket());
-				program_stop = true;
-				System.out.println("서버종료");
+				login_stop = true;
+				System.out.println(ID + " : 로그인 종료");
 				break;
 
 			case Protocol.PT_RES_LOGIN: // 로그인 정보 수신
-				System.out.println("클라이언트가 " + "로그인 정보를 보냈습니다");
+				System.out.println(ID + " : 클라이언트가 " + "로그인 정보를 보냈습니다");
 				String id = protocol.getId();
 				String password = protocol.getPassword();
-			
-				System.out.println(id + " " + password);
-
 
 				sql.setInfo(id.toString().trim(), password.toString().trim());
 				if (id.charAt(0) == 'a') {
@@ -136,7 +131,7 @@ public class MainServer implements Runnable {
 				}
 
 				if (sql.getInfo().getName() == null) { //
-					System.out.println("암호 틀림");
+					System.out.println(ID + " : 암호 틀림");
 					chance = chance - 1;
 					if (chance > 0) {
 						protocol = new Protocol(Protocol.PT_REQ_LOGIN);
@@ -157,22 +152,28 @@ public class MainServer implements Runnable {
 					}
 					// 로그인한 사람의 정보를 가져오는 방식이다.
 					protocol.setQueryResult(queryResult);
-					System.out.println(queryResult);
+					System.out.println(ID + " : " + queryResult);
 					protocol.setLoginResult("1");
-					System.out.println("로그인 성공");
+					System.out.println(ID + " : 로그인 성공");
+					login_success = true;
 				}
 
-				System.out.println("로그인 처리 결과 전송\n");
+				System.out.println(ID + " : 로그인 처리 결과 전송\n");
 				os.write(protocol.getPacket());
 				break;
 			}// end switch
-			if (program_stop)
+			if (login_stop)
 				break;
 
 		} // end while
 		
 		//다른 기능들 대기
-		System.out.println(ID + "로그인성공");
+		if(login_success) {
+			// 다른 기능 여기 넣어
+		} else {
+			remove(ID);
+			return;
+		}
 	}
 
 	public static void main(String[] args) {
